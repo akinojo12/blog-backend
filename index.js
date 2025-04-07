@@ -17,7 +17,11 @@ const app = express()
 app.use(express.json());
 
 app.use(cors({
-    origin: 'blog-project-amber-mu.vercel.app'
+    origin:[
+        'https://blog-project-amber-mu.vercel.app',
+        'http://localhost:5176/'
+    ], 
+    credentials: true
 }));
 app.use('/api/auth', authRoutes);
 app.use('/api/users', userRoutes);
