@@ -26,7 +26,7 @@ app.use((err, req, res, next) => {
 app.use(cors({
     origin:[
         'https://blog-project-amber-mu.vercel.app',
-        'http://localhost:5173'
+        // 'http://localhost:5173'
     ], 
     credentials: true
 }));
