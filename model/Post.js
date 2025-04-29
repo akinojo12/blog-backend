@@ -1,19 +1,56 @@
-const mongoose = require("mongoose");
+const mongoose = require('mongoose');
 
-const postSchema = mongoose.Schema({
-    title: { type: String, required: true },
-    content: { type: String, required: true },
-    excerpt: { type: String, required: true},
-    author: { type: mongoose.Schema.Types.ObjectId, ref: "User" },
-    likes: [{ type: mongoose.Schema.Types.ObjectId, ref: "User" }],
-    likesCount: { type: Number, deafult: 0},
-    slug: { type: String, required: true, unique: true},
-    featuredImage: { public_id: {type: String,},
-            url: {type: String,},
+const postSchema = new mongoose.Schema(
+  {
+    title: {
+      type: String,
+      required: [true, 'Post title is required'],
+      trim: true,
     },
-     
-}, { timestamps : true });
+    content: {
+      type: String,
+      required: [true, 'Post content is required'],
+      trim: true,
+    },
+    excerpt: {
+      type: String,
+      trim: true,
+    },
+    slug: {
+      type: String,
+      required: true,
+      unique: true,
+      trim: true,
+    },
+    user: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'User',
+      required: true,
+    },
+    featuredImage: {
+      public_id: {
+        type: String,
+      },
+      url: {
+        type: String,
+      },
+    },
+    likes: [
+      {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'User',
+      },
+    ],
+    likesCount: {
+      type: Number,
+      default: 0,
+    },
+    commentCount: { // Added field
+      type: Number,
+      default: 0,
+    },
+  },
+  { timestamps: true }
+);
 
-const Post = mongoose.model("Post", postSchema); 
-
-module.exports = Post;
+module.exports = mongoose.model('Post', postSchema);

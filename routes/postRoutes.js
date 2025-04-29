@@ -1,14 +1,30 @@
-const express = require ('express');
-const router = express.Router()
-const postController = require ('../controllers/postController');
+const express = require('express');
+const router = express.Router();
 const { protect } = require('../middleware/authMiddleware');
-const { uploadSingleImage } = require('../middleware/uploadMiddleware')
+const {
+  createPost,
+  getPosts,
+  getPostById,
+  getPostBySlug,
+  updatePost,
+  deletePost,
+  likePost,
+  unlikePost,
+  getPostsByUser,
+  getLikedPosts,
+} = require('../controllers/postController');
+const { uploadSingleImage } = require('../middleware/uploadMiddleware');
 
-router.route('/').post(protect, uploadSingleImage('featuredImage'), postController.createPost).get(postController.getPosts);
-
-router.route('/user/:userId').get(postController.getPostByUser);
-router.route('/:slug').get(postController.getPostBySlug);
-router.route('/:id').put(protect, uploadSingleImage('featuredImage'), postController.updatePost).delete(protect, postController.deletePost);
-router.route('/:id/like').post(protect, postController.likePost).delete(protect, postController.unlikePost);
+router.post('/', protect, uploadSingleImage('featuredImage'), createPost);
+router.get('/', protect, getPosts);
+router.get('/slug/:slug', protect, getPostBySlug);
+router.get('/liked', protect, getLikedPosts);
+router.get('/user', protect, getPostsByUser);
+router.get('/user/:userId', protect, getPostsByUser);
+router.get('/:id', protect, getPostById);
+router.put('/:id', protect, uploadSingleImage('featuredImage'), updatePost);
+router.delete('/:id', protect, deletePost);
+router.post('/:id/like', protect, likePost);
+router.post('/:id/unlike', protect, unlikePost);
 
 module.exports = router;

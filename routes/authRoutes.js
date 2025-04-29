@@ -1,18 +1,31 @@
-const express = require ('express')
-const router = express.Router()
-const authController = require('../controllers/authController')
-const { uploadSingleImage } = require('../middleware/uploadMiddleware')
-const { check } = require ('express-validator')
+const express = require('express');
+const router = express.Router();
+const { registerUser, authUser, getUserProfile, updateUserProfile, forgotPassword, resetPassword } = require('../controllers/authController');
+const { protect } = require('../middleware/authMiddleware');
+const { check } = require('express-validator');
 
-router.post('/register', [
+router.post(
+  '/register',
+  [
     check('name', 'Name is required').not().isEmpty(),
-    check('password', 'Please enter a password with 8 or more characters').isLength({ min: 8 }),
-], authController.registerUser)
+    check('email', 'Please include a valid email').isEmail(),
+    check('password', 'Password must be 8 or more characters').isLength({ min: 8 }),
+  ],
+  registerUser
+);
 
-router.post('/login', authController.authUser);
-router.get('/profile', authController.getUserProfile);
-router.put('/profile', uploadSingleImage('profilePicture'), authController.updateUserProfile);
-router.post('/forgotpassword', authController.forgotPassword);
-router.put('/resetpassword/:resettoken', authController.resetPassword);
+router.post(
+  '/login',
+  [
+    check('email', 'Please include a valid email').isEmail(),
+    check('password', 'Password is required').exists(),
+  ],
+  authUser
+);
+
+router.get('/profile', protect, getUserProfile);
+router.put('/profile', protect, updateUserProfile);
+router.post('/forgotpassword', forgotPassword);
+router.put('/resetpassword/:resettoken', resetPassword);
 
 module.exports = router;

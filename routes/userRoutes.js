@@ -1,9 +1,17 @@
-const express = require ('express')
-const router = express.Router()
-const userController = require ('../controllers/userController')
-const { protect, admin } = require('../middleware/authMiddleware')
+const express = require('express');
+const router = express.Router();
+const { protect } = require('../middleware/authMiddleware');
+const { getUserById, getMe, registerUser, loginUser, updateUser, deleteUser, updateProfilePicture } = require('../controllers/userController');
+const { uploadSingleImage } = require('../middleware/uploadMiddleware');
 
-router.route('/').get(protect, admin, userController.getUsers)
-router.route('/:id').get(userController.getUserById).put(protect, admin, userController.updateUser).delete(protect, admin, userController.deleteUser)
+
+router.post('/', registerUser);
+router.post('/login', loginUser);
+router.get('/me', protect, getMe);
+
+router.put('/profile-picture', protect, uploadSingleImage('profilePicture'), updateProfilePicture);
+router.put('/profile', protect, uploadSingleImage('profilePicture'), updateUser);
+router.get('/:id', protect, getUserById);
+router.delete('/:id', protect, deleteUser);
 
 module.exports = router;
