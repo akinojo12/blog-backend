@@ -22,14 +22,16 @@ app.use((err, req, res, next) => {
         success: false,
     });
 });
-
-app.use(cors({
-    origin:[
-        'https://blog-project-amber-mu.vercel.app',
-        // 'http://localhost:5173'
-    ], 
-    credentials: true
-}));
+app.use(cors())
+// app.use(cors({
+//     origin:[
+//         'https://blog-project-amber-mu.vercel.app',
+//         'http://localhost:5173'
+//     ], 
+//     methods: ['GET', 'POST', 'PATCH'],
+//     allowedHeaders: ['Content-Type', 'Authorization'],
+//     credentials: true
+// }));
 
 
 app.use('/api/auth', authRoutes);
@@ -37,5 +39,5 @@ app.use('/api/users', userRoutes);
 app.use('/api/posts', postRoutes);
 app.use('/api/comments', commentRoutes);
 
-const PORT = process.env.PORT || 10000;
+const PORT = process.env.PORT || 2130;
 app.listen(PORT, () => console.log(`Server running at http://localhost:${PORT}`));
